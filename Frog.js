@@ -11,7 +11,7 @@ class Frog {
   reset (){
       this.position = createVector(
         random(-20, 0),
-        random(0, height)
+        random(30, height-30)
       )
       this.w = this.SIZE;
       this.h = this.SIZE;

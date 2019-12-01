@@ -10,7 +10,7 @@ class Car {
     );
     this.acceleration = createVector(0, 0);
     this.angle = 0
-    this.maxspeed = 3;
+    this.maxspeed = 5;
     this.maxforce = 0.25;
     this.ai = ai;
 

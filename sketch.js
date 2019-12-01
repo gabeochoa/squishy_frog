@@ -17,14 +17,17 @@ class Blood {
     this.fade = 255;
   }
   draw(){
+    push()
+    noStroke()
     fill(255, 0, 0, this.fade--);
     rect(this.pos.x, this.pos.y, 3.5, 3.5);
+    pop()
   }
 }
 
 function setup() {
   t_start = millis()
-  createCanvas(400, 400);
+  createCanvas(400, 450);
   noStroke();
   c = new DrivableCar(200, 200);
   setupRoads();
@@ -91,7 +94,7 @@ function hitFrog(frog, is_user=false){
 
 function drawUI(t_elapsed) {
   fill(0)
-  rect(0, 0, width, 10 + 3)
+  rect(0, 0, width, 10 + 10)
   fill(255)
   textSize(12);
   text('Points: ' + points, 10, 10 + 1.5);

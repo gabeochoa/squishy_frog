@@ -3,10 +3,12 @@ class AICar extends Car {
   constructor(x, y) {
     super(x, y, true, true)
     this.debug_vectors = {};
+    this.teleport_reset = 100;
+    this.teleported = this.teleport_reset;
   }
 
   separateCars(){
-    return this.separate(cars.concat([c]), this.h*3);
+    return this.separate(cars.concat([c]), this.h);
   }
   separateFrogs(){
     return this.separate(frogs, this.w);
@@ -125,6 +127,7 @@ class AICar extends Car {
       this.impacted = 2;
       return;
     }
+
     const sep_frogs = this.separateFrogs()
     const sep_cars = this.separateCars()
     const stay = this.stayOnRoad(road)
@@ -136,16 +139,16 @@ class AICar extends Car {
       road.direction
     );
     this.debug_vectors['sep_cars'] = sep_cars
-    this.debug_vectors['sep_frogs'] = sep_frogs
-    this.debug_vectors['stay'] = stay
+    // this.debug_vectors['sep_frogs'] = sep_frogs
+    // this.debug_vectors['stay'] = stay
     this.debug_vectors['steer'] = steer
     // make avoiding frogs less important
     // sep.mult(0.25)
-    // steer.mult(0.50)
+    steer.mult(2)
+    this.applyForce(steer)
     // steer.add(stay)
     // steer.add(sep_frogs)
-    steer.add(sep_cars)
-    this.applyForce(steer)
+    this.applyForce(sep_cars)
   }
 
   getColor(){
@@ -163,12 +166,17 @@ class AICar extends Car {
     }
     this.velocity.add(this.acceleration)
     this.velocity.limit(this.maxspeed * this.getRoadSpeed(road));
-    if (this.position.y < -this.h) {
-      this.position.y = height;
+    if(this.teleported < 0){
+      if (this.position.y < -this.h) {
+        this.position.y = height-this.h;
+      }
+      if (this.position.y > height + this.h) {
+        this.position.y = this.h;
+      }
+      this.teleported = this.teleport_reset;
     }
-    if (this.position.y > height + this.h) {
-      this.position.y = 0;
-    }
+    this.teleported --;
+
     this.position.add(this.velocity)
     this.acceleration.mult(0.5);
   }
