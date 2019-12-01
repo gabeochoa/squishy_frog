@@ -1,11 +1,18 @@
-function intersection(car, road) {
+function intersection(car, road, hitpoint) {
   const rect1 = {
     x: car.x,
     y: car.y,
     w: car.w,
     h: car.h
   };
-  const rect2 = {
+
+
+  if (hitpoint) {
+    //divide car into four boxes
+    
+  }
+
+  var rect2 = {
     x: road.x,
     y: road.y,
     w: road.w,
@@ -16,6 +23,7 @@ function intersection(car, road) {
     y1 = rect2.y,
     x2 = x1 + rect2.w,
     y2 = y1 + rect2.h;
+  
   if (rect1.x > x1) {
     x1 = rect1.x;
   }
