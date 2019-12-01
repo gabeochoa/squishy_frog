@@ -22,8 +22,8 @@ function intersection(a, b, hitpoint) {
       // RT: 1
       // LB: 2
       // RB: 3
-      rect2.x = i % 2 ? b.x + b.w: b.x;
-      rect2.y = Math.floor(i / 2)  ? b.y + b.h : b.y;
+      rect2.x = i % 2 ? b.position.x + b.w: b.position.x;
+      rect2.y = Math.floor(i / 2)  ? b.position.y + b.h : b.position.y;
       hitpoint[i] = miniInsec(rect1, rect2);
     }
     for (i = 0; i < 4; i++) {

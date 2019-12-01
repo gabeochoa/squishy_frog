@@ -81,10 +81,11 @@ function hitFrog(frog, is_user=false){
       frogs.push(new Frog())
     }
   }
-  blood.push(new Blood(frog.position.x, frog.position.y))
   if(blood.length > 50){
-    blood.pop();
-  }
+    blood.shift();
+  } 
+  blood.push(new Blood(frog.position.x, frog.position.y))
+  
   frog.reset();
 }
 
