@@ -3,6 +3,8 @@ class Road {
   constructor(x, w, type) {
     this.x = x;
     this.w = w;
+    this.y = 0;
+    this.h = height;
     this.type = type;
   }
 
