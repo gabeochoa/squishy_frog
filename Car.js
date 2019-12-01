@@ -1,16 +1,21 @@
 
 class Car {
-  constructor(x, y, ai=false) {
+  constructor(x, y, ai=false, ai_dir=true) {
     this.angle = 0
     this.x = x;
     this.y = y;
     this.w = 10;
     this.h = 20;
+    this.vy = 0;
     this.ai = ai;
+    this.ai_settings = {
+      "direction": ai_dir,
+      "speed": random(0.5, 1)
+    }
   }
-  
+
   ai_move(){
-    return [0, -1]
+    return [0, (this.ai_settings['direction']? -1 : 1) * this.ai_settings['speed']]
   }
 
   draw() {
@@ -21,7 +26,7 @@ class Car {
     rect(-this.w/2, -this.h/2, this.w, this.h);
     pop();
   }
-  
+
   move(dirx, diry, road){
     let x, y;
     if(this.ai){
@@ -29,8 +34,6 @@ class Car {
     }else{
       [x, y] = this.actual_move(dirx, diry, road)
     }
-  
-        // EDGE CHECK
     if (this.y < 0) {
       this.y = height;
     }
@@ -43,7 +46,6 @@ class Car {
     if (this.x + this.w + this.w > width && x > 0) {
       x = 0;
     }
-
     this.x += x;
     this.y += y;
   }

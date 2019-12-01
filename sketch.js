@@ -1,4 +1,5 @@
 let c = null;
+let frogs = [];
 let cars = [];
 let roads = [];
 
@@ -7,9 +8,17 @@ function setup() {
   createCanvas(400, 400);
   c = new Car(200, 200);
   setupRoads();
-  cars.push(new Car(210, 200, true));
+  setupCars();
+  setupFrogs();
 }
+function setupFrogs(){
 
+}
+function setupCars(){
+  cars.push(new Car(110, height/4, true, true));
+  cars.push(new Car(210, 200, true, false));
+  cars.push(new Car(290, height, true, true));
+}
 function setupRoads(){
   roads.push(new Road(0, 50, 'grass'));
   roads.push(new Road(50, 50, 'road'));
@@ -30,11 +39,8 @@ function keyStuff() {
   } else if (keyIsDown(RIGHT_ARROW)) {
     x = 1;
   }
-
   if (keyIsDown(UP_ARROW)) {
     y = -1;
-  } else if (keyIsDown(DOWN_ARROW)) {
-    y = 1;
   }
   return [x, y];
 }
@@ -59,10 +65,10 @@ function draw() {
   background(0);
   // Collision
   const onRoad = road_col(c, roads);
-  
+
   // Movement
   c.move(...mvmt, onRoad);
-  
+
   for (const car of cars) {
     car.move();
   }
