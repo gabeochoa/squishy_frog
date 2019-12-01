@@ -26,22 +26,22 @@ function setup() {
 }
 
 function setupFrogs(){
-  for(var i = 0; i<10; i++){
+  for(var i = 0; i<25; i++){
     frogs.push(new Frog());
   }
 }
 function setupCars(){
-  cars.push(new Car(110, height/4, true, true));
-  // cars.push(new Car(210, 200, true, false));
-  // cars.push(new Car(290, height, true, true));
+  for(var i = 0; i<10; i++){
+    cars.push(new Car(random(0, 340), random(height), true));
+  }
 }
 function setupRoads(){
   roads.push(new Road(0, 50, 'grass'));
-  roads.push(new Road(50, 50, 'road'));
-  roads.push(new Road(100, 50, 'road'));
+  roads.push(new Road(50, 50, 'road', 1));
+  roads.push(new Road(100, 50, 'road', -1));
   roads.push(new Road(150, 50, 'grass'));
-  roads.push(new Road(200, 50, 'road'));
-  roads.push(new Road(250, 50, 'road'));
+  roads.push(new Road(200, 50, 'road', 1));
+  roads.push(new Road(250, 50, 'road', -1));
   roads.push(new Road(300, 50, 'grass'));
   roads.push(new Road(350, 50, 'water'));
 }
@@ -126,7 +126,8 @@ function draw() {
   }
 
   for (const car of cars) {
-    car.move(null, null, null, frogs);
+    const onRoad = list_col(car, roads, {type: 'none'});
+    car.move(null, null, onRoad, frogs);
   }
 
   // Drawing only

@@ -1,11 +1,12 @@
 
 class Road {
-  constructor(x, w, type) {
+  constructor(x, w, type, direction=0) {
     this.x = x;
     this.w = w;
     this.y = 0;
     this.h = height;
     this.type = type;
+    this.direction = direction;
   }
 
   getCol() {

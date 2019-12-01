@@ -46,24 +46,74 @@ class Car {
   }
 
   stayInLane(road){
-    if(road == null){ return }
+    const STRAY_DIST = this.w
+    const predict = this.velocity.copy();
+    predict.normalize(); predict.mult(25);
+    const predicted_loc = p5.Vector.add(this.position, predict)
+
+    const left_start = createVector(road.x + this.w, road.y)
+    const left_end = createVector(road.x + this.w, height)
+    const right_start = createVector(road.x + road.w, road.y)
+    const right_end = createVector(road.x + road.w, height)
+    const left_dist = p5.Vector.dist(this.position, left_start)
+    const right_dist = p5.Vector.dist(this.position, right_start)
+    let a = left_start
+    let b = left_end
+    if(left_dist > right_dist)
+    {
+      a = right_start
+      b = right_end
+    }
+    const normal = this.getNormal(predicted_loc, a, b);
+    const dir = p5.Vector.sub(b, a);
+    dir.normalize();
+    dir.mult(10)
+    const target = p5.Vector.add(normal, dir);
+    const dist = p5.Vector.dist(normal, predicted_loc)
+    if(dist > STRAY_DIST){
+      return this.seek(target)
+    }
+    return null
+  }
+
+  getNormal(p, a, b){
+    const a_to_p = p5.Vector.sub(p, a)
+    const a_to_b = p5.Vector.sub(b, a)
+    a_to_b.normalize()
+    a_to_b.mult(a_to_p.dot(a_to_b))
+    return p5.Vector.add(a, a_to_b)
+  }
+
+  seek(target){
+    const desired = p5.Vector.sub(target, this.position);
+    desired.normalize();
+    return p5.Vector.sub(desired, this.velocity)
+  }
+
+  stayOnRoad(road){
+    if(!road){ return null; }
     for(const r of roads){
-      if(r.x == road.x){
-        continue;
-      }
-      console.log(r)
+      if(road.type == 'road'){ continue}
+      const s = this.stayInLane(r)
+      if(s){ return s }
     }
   }
 
   ai_move(road){
     const sep = this.separate()
-    const stay = this.stayInLane(road)
-    // targeting
-    const target = createVector(this.position.x, this.position.y + 20);
-    const desired = p5.Vector.sub(target, this.position);
-    desired.normalize();
-    desired.mult(this.ai? -1: 1)
-    const steer = p5.Vector.sub(desired, this.velocity)
+    const stay = this.stayOnRoad(road)
+    const steer = this.seek(
+      createVector(
+        this.position.x,
+        this.position.y + ( 1 * road.direction )
+      )
+    );
+
+    // make avoiding frogs less important
+    sep.mult(0.25)
+    steer.mult(0.50)
+
+    steer.add(stay)
     steer.add(sep)
     this.applyForce(steer)
   }
@@ -118,7 +168,7 @@ class Car {
   }
 
   actual_move(dirx, diry, road) {
-    this.angle += (dirx * this.maxspeed * 180/PI);
+    this.angle += (dirx * this.maxspeed * PI/180);
     let r = 0
     switch (road.type) {
       case 'grass':
