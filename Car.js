@@ -27,12 +27,12 @@ class Car {
     pop();
   }
 
-  move(dirx, diry, road){
+  move(...args){
     let x, y;
     if(this.ai){
      [x, y] = this.ai_move();
     }else{
-      [x, y] = this.actual_move(dirx, diry, road)
+      [x, y] = this.actual_move(...args)
     }
     if (this.y < 0) {
       this.y = height;
@@ -52,7 +52,7 @@ class Car {
 
   actual_move(dirx, diry, road) {
     const DEFAULT_HORIZ = 5;
-    const ROTATE_SPD = 2;
+    const ROTATE_SPD = 3;
 
     this.angle += dirx * ROTATE_SPD;
     const DEFAULT_VERT = 5;
