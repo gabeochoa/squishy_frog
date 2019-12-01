@@ -85,7 +85,7 @@ function hitFrog(frog, is_user=false){
   if(is_user){
     console.log("You hit a frog")
     points += FROG_POINTS;
-    if(random(0,1) > 0.5){ frogs.push(new Frog()) }
+    frogs.splice(frogs.indexOf(frog), 1);
   }
   if(blood.length > 100){ blood.shift() }
   blood.push(new Blood(frog.position.x, frog.position.y))
@@ -98,7 +98,8 @@ function drawUI(t_elapsed) {
   fill(255)
   textSize(12);
   text('Points: ' + points, 10, 10 + 1.5);
-  text('Time Passed: ' + round(t_elapsed/1000), 200, 10 + 1.5);
+  text('Time Passed: ' + round(t_elapsed/1000), 100, 10 + 1.5);
+  text('# Frogs: ' + (frogs.length), 250, 10 + 1.5);
 }
 
 function move_and_collision(){

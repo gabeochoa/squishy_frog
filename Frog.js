@@ -23,6 +23,7 @@ class Frog {
       let x = this.JUMP
 
       if (this.position.x + this.w + this.w > width && x > 0) {
+        if(random(0, 1) > 0.5) {frogs.push(new Frog())}
         this.reset();
       }
       else{
