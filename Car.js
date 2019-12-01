@@ -118,6 +118,10 @@ class Car {
     this.applyForce(steer)
   }
 
+  getColor(){
+    return [255, 255, 255]
+  }
+
   draw() {
     push()
     translate(this.position.x, this.position.y)
@@ -126,7 +130,7 @@ class Car {
     }else{
       rotate(this.angle)
     }
-    fill(255)
+    fill(...this.getColor())
     rect(-this.w/2, -this.h/2, this.w, this.h);
     pop();
     if(this.ai){

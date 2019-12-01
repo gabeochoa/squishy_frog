@@ -34,6 +34,7 @@ function setupCars(){
   for(var i = 0; i<10; i++){
     cars.push(new Car(random(0, 340), random(height), true));
   }
+  cars.push(new Truck(random(0, 340), random(height)));
 }
 function setupRoads(){
   roads.push(new Road(0, 50, 'grass'));
