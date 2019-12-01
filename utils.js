@@ -1,13 +1,13 @@
 function intersection(a, b, hitpoint) {
   const rect1 = {
-    x: a.x,
-    y: a.y,
+    x: a.position.x,
+    y: a.position.y,
     w: a.w,
     h: a.h
   };
   var rect2 = {
-    x: b.x,
-    y: b.y,
+    x: b.position.x,
+    y: b.position.y,
     w: b.w,
     h: b.h
   };
@@ -35,10 +35,6 @@ function intersection(a, b, hitpoint) {
   } else {
     return miniInsec(rect1, rect2);
   }
-
-  
-
-  
 }
 
 function miniInsec(rect1, rect2){
@@ -46,7 +42,7 @@ function miniInsec(rect1, rect2){
     y1 = rect2.y,
     x2 = x1 + rect2.w,
     y2 = y1 + rect2.h;
-  
+
   if (rect1.x > x1) {
     x1 = rect1.x;
   }

@@ -1,5 +1,6 @@
 let c = null;
 let frogs = [];
+const DEBUG = false
 
 class Blood {
   constructor(x, y){
@@ -32,9 +33,9 @@ function setupFrogs(){
 }
 function setupCars(){
   for(var i = 0; i<10; i++){
-    cars.push(new Car(random(0, 340), random(height), true));
+    cars.push(new Car(random(50, 300), random(height), true));
   }
-  cars.push(new Truck(random(0, 340), random(height)));
+  cars.push(new Truck(random(50, 300), random(height)));
 }
 function setupRoads(){
   roads.push(new Road(0, 50, 'grass'));

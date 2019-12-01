@@ -4,6 +4,7 @@ class Truck extends Car {
     super(x, y, true, true);
     this.h *= 2.5
     this.w *= 1.25
+    this.maxspeed = 3
   }
 
   getColor(){
