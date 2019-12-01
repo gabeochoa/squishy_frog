@@ -106,11 +106,10 @@ function move_and_collision(){
   const mvmt = keyStuff();
   const onRoad = list_col(c, roads, {type: 'none'});
   const onFrog = list_col(c, frogs, null);
-  let hits = [false, false, false, false];
-  const onCar = list_col(c, cars, null, hits);
+  const onCar = list_col(c, cars, null);
   if (onCar) {
     console.log("ON Car", onCar)
-    onCar.impact(c, hits)
+    onCar.impact(c)
   }
   if(onFrog){
     hitFrog(onFrog, true)
