@@ -1,9 +1,8 @@
 
 class Road {
-  constructor(x, w, type, direction=0) {
-    this.x = x;
+  constructor(x, w, type, direction=1) {
+    this.position = createVector(x, 0)
     this.w = w;
-    this.y = 0;
     this.h = height;
     this.type = type;
     this.direction = direction;
@@ -24,11 +23,11 @@ class Road {
 
   draw() {
     fill(...this.getCol())
-    rect(this.x, 0, this.w, height);
+    rect(this.position.x, 0, this.w, height);
     if (this.type == 'road') {
       fill(255)
       for (var i = 0; i < height; i += 20) {
-        rect(this.x + (this.w / 2), i, 5, 10);
+        rect(this.position.x + (this.w / 2), i, 5, 10);
       }
     }
   }

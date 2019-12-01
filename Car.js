@@ -8,7 +8,7 @@ class Car {
     );
     this.acceleration = createVector(0, 0);
     this.angle = 0
-    this.maxspeed = 5;
+    this.maxspeed = 7;
     this.maxforce = 0.25;
     this.ai = ai;
     
@@ -85,9 +85,10 @@ class Car {
     return p5.Vector.add(a, a_to_b)
   }
 
-  seek(target){
+  seek(target, d=1){
     const desired = p5.Vector.sub(target, this.position);
     desired.normalize();
+    desired.mult(d)
     return p5.Vector.sub(desired, this.velocity)
   }
 
@@ -131,17 +132,21 @@ class Car {
     const steer = this.seek(
       createVector(
         this.position.x,
-        this.position.y + ( 1 * road.direction )
-      )
+        this.position.y + 10
+      ),
+      road.direction
     );
-
     // make avoiding frogs less important
     sep.mult(0.25)
     steer.mult(0.50)
-
-    steer.add(stay)
+    // steer.add(stay)
     steer.add(sep)
     this.applyForce(steer)
+  }
+
+  getColor(){
+    if(!this.ai) return [255, 0, 0];
+    return [255, 255, 255]
   }
 
   draw() {
@@ -152,10 +157,10 @@ class Car {
     }else{
       rotate(this.angle)
     }
-    fill(255)
+    fill(...this.getColor())
     rect(-this.w/2, -this.h/2, this.w, this.h);
     pop();
-    if(this.ai){
+    if(DEBUG && this.ai){
       for(const frog of frogs){
         const d = p5.Vector.dist(this.position, frog.position);
         if(d > 0 && d < this.sep){
@@ -173,10 +178,10 @@ class Car {
     }
     this.velocity.add(this.acceleration)
 
-    if (this.position.y < 0) {
+    if (this.position.y < -this.h) {
       this.position.y = height;
     }
-    if (this.position.y > height) {
+    if (this.position.y > height + this.h) {
       this.position.y = 0;
     }
     if (
@@ -187,9 +192,6 @@ class Car {
       this.velocity.x = 0
     }
     this.position.add(this.velocity)
-    // TODO remove and update collision code
-    this.x = this.position.x
-    this.y = this.position.y
     this.acceleration.mult(0.5);
   }
 
