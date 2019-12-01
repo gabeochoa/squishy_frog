@@ -11,7 +11,7 @@ class Road {
   getCol() {
     switch (this.type) {
       case 'road':
-        return [255, 255, 255, 200]
+        return [255, 255, 255, 100]
       case 'grass':
         return [0, 150, 0];
       case 'water':
@@ -22,6 +22,8 @@ class Road {
   }
 
   draw() {
+    push()
+    stroke(0)
     fill(...this.getCol())
     rect(this.position.x, 0, this.w, height);
     if (this.type == 'road') {
@@ -30,5 +32,6 @@ class Road {
         rect(this.position.x + (this.w / 2), i, 5, 10);
       }
     }
+    pop()
   }
 }

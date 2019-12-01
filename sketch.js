@@ -1,25 +1,30 @@
 let c = null;
 let frogs = [];
-const DEBUG = false
 
-class Blood {
-  constructor(x, y){
-    this.x = x; this.y = y;
-  }
-  draw(){
-    fill(255, 0, 0);
-    rect(this.x, this.y, 3.5, 3.5);
-  }
-}
 let blood = [];
 let cars = [];
 let roads = [];
 let points = 0
 const FROG_POINTS = 10;
+const DEBUG = false
+let t_start;
+let t_elapsed = 0;
 
+class Blood {
+  constructor(x, y){
+    this.pos = createVector(x, y);
+    this.fade = 255;
+  }
+  draw(){
+    fill(255, 0, 0, this.fade--);
+    rect(this.pos.x, this.pos.y, 3.5, 3.5);
+  }
+}
 
 function setup() {
+   t_start = millis()
   createCanvas(400, 400);
+  noStroke();
   c = new DrivableCar(200, 200);
   setupRoads();
   setupCars();
@@ -28,7 +33,7 @@ function setup() {
 
 function setupFrogs(){
   for(var i = 0; i<25; i++){
-    // frogs.push(new Frog());
+    frogs.push(new Frog());
   }
 }
 function setupCars(){
@@ -37,6 +42,7 @@ function setupCars(){
   }
   cars.push(new Truck(random(50, 300), random(height)));
 }
+
 function setupRoads(){
   roads.push(new Road(0, 50, 'grass'));
   roads.push(new Road(50, 50, 'road', 1));
@@ -66,9 +72,7 @@ function keyStuff() {
 function list_col(c, items, default_val, car) {
   for (const r of items) {
     const b = car ? intersection(c, r, car) : intersection(c, r);
-    if (b) {
-      return r
-    }
+    if (b) { return r; }
   }
   return default_val
 }
@@ -77,80 +81,67 @@ function hitFrog(frog, is_user=false){
   if(is_user){
     console.log("You hit a frog")
     points += FROG_POINTS;
-    if(random(0,1) > 0.5){
-      frogs.push(new Frog())
-    }
+    if(random(0,1) > 0.5){ frogs.push(new Frog()) }
   }
-  if(blood.length > 50){
-    blood.shift();
-  }
+  if(blood.length > 100){ blood.shift() }
   blood.push(new Blood(frog.position.x, frog.position.y))
-
   frog.reset();
 }
 
-function drawUI() {
+function drawUI(t_elapsed) {
   fill(0)
   rect(0, 0, width, 10 + 3)
   fill(255)
   textSize(12);
   text('Points: ' + points, 10, 10 + 1.5);
+  text('Time Passed: ' + round(t_elapsed/1000), 200, 10 + 1.5);
 }
 
-function draw() {
+function move_and_collision(){
   const mvmt = keyStuff();
-  background(0);
-  // Collision
   const onRoad = list_col(c, roads, {type: 'none'});
   const onFrog = list_col(c, frogs, null);
   let hits = [false, false, false, false];
   const onCar = list_col(c, cars, null, hits);
-
   if (onCar) {
     console.log("ON Car", onCar)
     onCar.impact(c, hits)
   }
-
   if(onFrog){
     hitFrog(onFrog, true)
   }
-
   for(const car of cars){
     const onFrog = list_col(car, frogs, null);
     if(onFrog){
       hitFrog(onFrog)
     }
   }
-
   // Movement
   c.move(...mvmt, onRoad);
-
   for (const frog of frogs) {
     frog.move();
   }
-
   for (const car of cars) {
     const onRoad = list_col(car, roads, {type: 'none'});
     car.move(null, null, onRoad, frogs);
   }
 
-  // Drawing only
-  for (const road of roads) {
-    road.draw();
-  }
+  // Remove old blood
+  blood = blood.filter(b => b.fade > 5);
+}
 
-  for (const frog of frogs) {
-    frog.draw();
+function draw_entities(){
+  for(const entity of [].concat(
+    roads, blood, frogs, cars, [c]
+  )){
+    entity.draw()
   }
+}
 
-  for (const b of blood) {
-    b.draw();
-  }
-
-  for (const car of cars) {
-    car.draw();
-  }
-
-  c.draw();
-  drawUI();
+function draw() {
+  t_elapsed = millis() - t_start;
+  background(0);
+  move_and_collision();
+  draw_entities()
+  drawUI(t_elapsed);
 }

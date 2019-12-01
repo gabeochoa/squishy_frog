@@ -29,6 +29,9 @@ class Car {
 
   draw() {
     push()
+    stroke(0)
+
+    push()
     translate(this.position.x, this.position.y)
     if(this.ai){
       rotate(this.velocity.heading() + PI/2)
@@ -46,6 +49,7 @@ class Car {
         }
       }
     }
+    pop();
   }
 
   move(dirx, diry, road){

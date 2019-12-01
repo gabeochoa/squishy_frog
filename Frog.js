@@ -36,8 +36,11 @@ class Frog {
   }
 
   draw(){
+    push()
+    stroke(0)
     fill(0, 255, 0);
     rect(this.position.x, this.position.y, this.w, this.h)
+    pop()
   }
 
 }
