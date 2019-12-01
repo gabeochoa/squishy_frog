@@ -33,7 +33,6 @@ class Car {
         sum.add(diff)
         count ++;
       }
-    }
     if(count > 0){
       sum.div(count)
       sum.normalize()
