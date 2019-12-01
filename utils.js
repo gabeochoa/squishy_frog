@@ -24,7 +24,7 @@ function intersection(a, b, hitpoint) {
       // RB: 3
       rect2.x = i % 2 ? b.x + b.w: b.x;
       rect2.y = Math.floor(i / 2)  ? b.y + b.h : b.y;
-      hitpoint[i] = miniInserc(rect1, rect2);
+      hitpoint[i] = miniInsec(rect1, rect2);
     }
     for (i = 0; i < 4; i++) {
       if (hitpoint[i]) {
