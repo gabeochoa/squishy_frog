@@ -33,7 +33,7 @@ function setupFrogs(){
 }
 function setupCars(){
   for(var i = 0; i<10; i++){
-    // cars.push(new Car(random(0, 340), random(height), true));
+    cars.push(new Car(random(0, 340), random(height), true));
   }
   cars.push(new Truck(random(50, 300), random(height)));
 }
@@ -83,9 +83,9 @@ function hitFrog(frog, is_user=false){
   }
   if(blood.length > 50){
     blood.shift();
-  } 
+  }
   blood.push(new Blood(frog.position.x, frog.position.y))
-  
+
   frog.reset();
 }
 

@@ -176,6 +176,14 @@ class Car {
     }else{
       this.actual_move(dirx, diry, road)
     }
+
+    if(this.position.x < this.w){
+      this.position.x += this.w/4
+    }
+    if(this.position.x + this.w > width){
+      this.position.x -= this.w/4
+    }
+
     this.velocity.add(this.acceleration)
     this.velocity.limit(this.maxspeed * this.getRoadSpeed(road));
 
@@ -185,13 +193,8 @@ class Car {
     if (this.position.y > height + this.h) {
       this.position.y = 0;
     }
-    if (
-      (this.position.x < this.w && this.position.x < 0 )
-      ||
-      ( this.position.x + this.w + this.w > width && this.position.x > 0 )
-    ) {
-      this.velocity.x = 0
-    }
+
+
     this.position.add(this.velocity)
     this.acceleration.mult(0.5);
   }
