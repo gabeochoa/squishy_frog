@@ -18,7 +18,6 @@ const FROG_POINTS = 10;
 
 
 function setup() {
-  angleMode(DEGREES);
   createCanvas(400, 400);
   c = new Car(200, 200);
   setupRoads();
