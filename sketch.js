@@ -1,7 +1,21 @@
 let c = null;
 let frogs = [];
+
+class Blood {
+  constructor(x, y){
+    this.x = x; this.y = y;
+  }
+  draw(){
+    fill(255, 0, 0);
+    rect(this.x, this.y, 3.5, 3.5);
+  }
+}
+let blood = [];
 let cars = [];
 let roads = [];
+let points = 0
+const FROG_POINTS = 10;
+
 
 function setup() {
   angleMode(DEGREES);
@@ -11,8 +25,11 @@ function setup() {
   setupCars();
   setupFrogs();
 }
-function setupFrogs(){
 
+function setupFrogs(){
+  for(var i = 0; i<10; i++){
+    frogs.push(new Frog());
+  }
 }
 function setupCars(){
   cars.push(new Car(110, height/4, true, true));
@@ -45,29 +62,56 @@ function keyStuff() {
   return [x, y];
 }
 
-function road_col(c, roads) {
-
+function list_col(c, roads, default_val) {
   for (const r of roads) {
     const b = intersection(c, r);
     if (b) {
       return r
     }
   }
+  return default_val
+}
 
-  // DEFAULT VALUE IS ROAD
-  return {
-    type: 'none'
-  };;
+
+function drawUI() {
+  fill(0)
+  rect(0, 0, width, 10 + 3)
+  fill(255)
+  textSize(12);
+  text('Points: ' + points, 10, 10 + 1.5);
 }
 
 function draw() {
   const mvmt = keyStuff();
   background(0);
   // Collision
-  const onRoad = road_col(c, roads);
+  const onRoad = list_col(c, roads, {type: 'none'});
+  const onFrog = list_col(c, frogs, null);
+
+  if(onFrog){
+    console.log("You hit a frog")
+    points += FROG_POINTS;
+    blood.push(new Blood(onFrog.x, onFrog.y))
+    onFrog.reset();
+    if(random(0,1) > 0.5){
+      frogs.push(new Frog())
+    }
+  }
+
+  for(const car of cars){
+    const onFrog = list_col(car, frogs, null);
+    if(onFrog){
+      blood.push(new Blood(onFrog.x, onFrog.y))
+      onFrog.reset();
+    }
+  }
 
   // Movement
   c.move(...mvmt, onRoad);
+
+  for (const frog of frogs) {
+    frog.move();
+  }
 
   for (const car of cars) {
     car.move();
@@ -78,9 +122,18 @@ function draw() {
     road.draw();
   }
 
+  for (const frog of frogs) {
+    frog.draw();
+  }
+
+  for (const b of blood) {
+    b.draw();
+  }
+
   for (const car of cars) {
     car.draw();
   }
 
   c.draw();
+  drawUI();
 }
