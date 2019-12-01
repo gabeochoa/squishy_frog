@@ -61,9 +61,9 @@ function keyStuff() {
   return [x, y];
 }
 
-function list_col(c, roads, default_val) {
+function list_col(c, roads, default_val, car) {
   for (const r of roads) {
-    const b = intersection(c, r);
+    const b = car ? intersection(c, r, car) : intersection(c, r);
     if (b) {
       return r
     }
@@ -100,6 +100,12 @@ function draw() {
   // Collision
   const onRoad = list_col(c, roads, {type: 'none'});
   const onFrog = list_col(c, frogs, null);
+  let hits = 1;
+  const onCar = list_col(c, cars, null, hits);
+
+  if (onCar) {
+    onCar.impact(c, hits)
+  }
 
   if(onFrog){
     hitFrog(onFrog, true)

@@ -1,21 +1,52 @@
-function intersection(car, road) {
+function intersection(a, b, hitpoint) {
   const rect1 = {
-    x: car.x,
-    y: car.y,
-    w: car.w,
-    h: car.h
+    x: a.x,
+    y: a.y,
+    w: a.w,
+    h: a.h
   };
-  const rect2 = {
-    x: road.x,
-    y: road.y,
-    w: road.w,
-    h: road.w
+  var rect2 = {
+    x: b.x,
+    y: b.y,
+    w: b.w,
+    h: b.h
   };
 
+  if (hitpoint) {
+    //divide car into four boxes
+    rect2.w /= 2
+    rect2.h /= 2
+    hitpoint = [false, false, false, false]
+    for (i = 0; i < 4; i++) {
+      // LT: 0
+      // RT: 1
+      // LB: 2
+      // RB: 3
+      rect2.x = i % 2 ? b.x + b.w: b.x;
+      rect2.y = Math.floor(i / 2)  ? b.y + b.h : b.y;
+      hitpoint[i] = miniInsec(rect1, rect2);
+    }
+    for (i = 0; i < 4; i++) {
+      if (hitpoint[i]) {
+        return true;
+      }
+    }
+    return false;
+  } else {
+    return miniInsec(rect1, rect2);
+  }
+
+  
+
+  
+}
+
+function miniInsec(rect1, rect2){
   var x1 = rect2.x,
     y1 = rect2.y,
     x2 = x1 + rect2.w,
     y2 = y1 + rect2.h;
+  
   if (rect1.x > x1) {
     x1 = rect1.x;
   }

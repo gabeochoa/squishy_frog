@@ -33,7 +33,6 @@ class Car {
         sum.add(diff)
         count ++;
       }
-    }
     if(count > 0){
       sum.div(count)
       sum.normalize()
@@ -119,5 +118,34 @@ class Car {
     const mspeedy = this.maxspeed * r
     this.velocity.y = cos(this.angle) * mspeedy * diry;
     this.velocity.x = sin(this.angle) * mspeedy * abs(diry);
+  }
+
+  impact(otherc, hits) {
+    // LT: 0 RT: 1 LB: 2 RB: 3
+    const lt = hits[0],
+          rt = hits[1],
+          lb = hits[2],
+          rb = hits[3];
+    if (lt && rt && lb && rb) {
+      console.log("Hit every part of this car");
+    }
+    let vec = createVector(0, 0);
+    if (lt) {
+      
+      this.acceleration.y += otherc.velocity.y;
+      this.acceleration.x += otherc.velocity.x;
+    }
+    if (rt) {
+      this.acceleration.y += otherc.velocity.y;
+      this.acceleration.x -= otherc.velocity.x;
+    }
+    if (lb) {
+      this.acceleration.y -= otherc.velocity.y;
+      this.acceleration.x += otherc.velocity.x;
+    }
+    if (rb) {
+      this.acceleration.y -= otherc.velocity.y;
+      this.acceleration.x -= otherc.velocity.x;
+    }
   }
 }
