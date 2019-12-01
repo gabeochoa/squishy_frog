@@ -11,7 +11,6 @@ function intersection(a, b, hitpoint) {
     w: b.w,
     h: b.h
   };
-
   if (hitpoint) {
     //divide car into four boxes
     rect2.w /= 2

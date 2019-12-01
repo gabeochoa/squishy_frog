@@ -8,10 +8,10 @@ class Car {
     );
     this.acceleration = createVector(0, 0);
     this.angle = 0
-    this.maxspeed = 7;
+    this.maxspeed = 5;
     this.maxforce = 0.25;
     this.ai = ai;
-    
+
     this.w = 10;
     this.h = 20;
     this.sep = this.h * 2;
@@ -137,8 +137,8 @@ class Car {
       road.direction
     );
     // make avoiding frogs less important
-    sep.mult(0.25)
-    steer.mult(0.50)
+    // sep.mult(0.25)
+    // steer.mult(0.50)
     // steer.add(stay)
     steer.add(sep)
     this.applyForce(steer)
@@ -177,6 +177,7 @@ class Car {
       this.actual_move(dirx, diry, road)
     }
     this.velocity.add(this.acceleration)
+    this.velocity.limit(this.maxspeed * this.getRoadSpeed(road));
 
     if (this.position.y < -this.h) {
       this.position.y = height;
@@ -195,8 +196,7 @@ class Car {
     this.acceleration.mult(0.5);
   }
 
-  actual_move(dirx, diry, road) {
-    this.angle += (dirx * this.maxspeed * PI/180);
+  getRoadSpeed(road){
     let r = 0
     switch (road.type) {
       case 'grass':
@@ -209,6 +209,12 @@ class Car {
         r = 0.75;
         break
     }
+    return r;
+  }
+
+  actual_move(dirx, diry, road) {
+    this.angle += (dirx * this.maxspeed * PI/180);
+    const r = this.getRoadSpeed(road);
     const mspeedy = this.maxspeed * r
     this.velocity.y = cos(this.angle) * mspeedy * diry;
     this.velocity.x = sin(this.angle) * mspeedy * abs(diry);
