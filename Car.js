@@ -11,10 +11,11 @@ class Car {
     this.maxspeed = 7;
     this.maxforce = 0.25;
     this.ai = ai;
-
+    
     this.w = 10;
     this.h = 20;
     this.sep = this.h * 2;
+    this.impacted = 0;
   }
 
   applyForce(force){
@@ -101,6 +102,31 @@ class Car {
   }
 
   ai_move(road){
+    if (this.impacted) {
+      //maybe decrease acceleration till velcoity is zero
+      if (this.impacted == 2) {
+        if (this.velocity.x != 0.0) {
+          if (Math.abs(this.velocity.x) < 0.1) {
+            this.velocity.x = 0.0;
+            this.acceleration.x = 0.0;
+          } else {
+            //decrease by 0.1
+            this.acceleration.x = this.velocity.x > 0 ? -0.1 : 0.1;
+          }
+        }
+        if (this.velocity.y != 0.0) {
+          if (Math.abs(this.velocity.y) < 0.1) {
+            this.velocity.y = 0.0;
+            this.acceleration.y = 0.0;
+          } else {
+            //decrease by 0.1
+            this.acceleration.y = this.velocity.y > 0 ? -0.1 : 0.1;
+          }
+        }
+      }
+      this.impacted = 2;
+      return;
+    }
     const sep = this.separate()
     const stay = this.stayOnRoad(road)
     const steer = this.seek(
@@ -119,6 +145,7 @@ class Car {
   }
 
   getColor(){
+    if(!this.ai) return [255, 0, 0];
     return [255, 255, 255]
   }
 
@@ -189,30 +216,38 @@ class Car {
 
   impact(otherc, hits) {
     // LT: 0 RT: 1 LB: 2 RB: 3
+    if (this.impacted) {
+      return;
+    }
+    this.impacted = 1;
     const lt = hits[0],
           rt = hits[1],
           lb = hits[2],
           rb = hits[3];
+    console.log("Impact: " + lt + rt + lb + rb);
     if (lt && rt && lb && rb) {
       console.log("Hit every part of this car");
     }
     let vec = createVector(0, 0);
     if (lt) {
-
-      this.acceleration.y += otherc.velocity.y;
-      this.acceleration.x += otherc.velocity.x;
+     vec.x = Math.abs(this.maxspeed);
+     vec.y = Math.abs(this.maxspeed);
     }
     if (rt) {
-      this.acceleration.y += otherc.velocity.y;
-      this.acceleration.x -= otherc.velocity.x;
+      vec.x = -Math.abs(this.maxspeed);
+      vec.y =  Math.abs(this.maxspeed);
     }
     if (lb) {
-      this.acceleration.y -= otherc.velocity.y;
-      this.acceleration.x += otherc.velocity.x;
+      vec.x = Math.abs(this.maxspeed);
+      vec.y = -Math.abs(this.maxspeed);
     }
     if (rb) {
-      this.acceleration.y -= otherc.velocity.y;
-      this.acceleration.x -= otherc.velocity.x;
+      vec.x = -Math.abs(this.maxspeed);
+      vec.y = -Math.abs(this.maxspeed);
     }
+    //vec.mult(4);
+    this.applyForce(vec);
+    vec.mult(-1);
+    otherc.applyForce(vec);
   }
 }

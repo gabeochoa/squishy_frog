@@ -16,7 +16,7 @@ function intersection(a, b, hitpoint) {
     //divide car into four boxes
     rect2.w /= 2
     rect2.h /= 2
-    hitpoint = [false, false, false, false]
+    //hitpoint = [false, false, false, false]
     for (i = 0; i < 4; i++) {
       // LT: 0
       // RT: 1
@@ -27,7 +27,7 @@ function intersection(a, b, hitpoint) {
       hitpoint[i] = miniInsec(rect1, rect2);
     }
     for (i = 0; i < 4; i++) {
-      if (hitpoint[i]) {
+      if (hitpoint[i] == true) {
         return true;
       }
     }
