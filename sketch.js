@@ -26,14 +26,14 @@ function setup() {
 }
 
 function setupFrogs(){
-  for(var i = 0; i<10; i++){
-    //frogs.push(new Frog());
+  for(var i = 0; i<50; i++){
+    frogs.push(new Frog());
   }
 }
 function setupCars(){
   cars.push(new Car(110, height/4, true, true));
-  // cars.push(new Car(210, 200, true, false));
-  // cars.push(new Car(290, height, true, true));
+  cars.push(new Car(210, 200, true, false));
+  cars.push(new Car(290, height, true, true));
 }
 function setupRoads(){
   roads.push(new Road(0, 50, 'grass'));

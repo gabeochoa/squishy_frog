@@ -130,7 +130,9 @@ class Car {
     if (lt && rt && lb && rb) {
       console.log("Hit every part of this car");
     }
+    vec = createVector(0, 0);
     if (lt) {
+      
       this.acceleration.y += otherc.velocity.y;
       this.acceleration.x += otherc.velocity.x;
     }
