@@ -60,7 +60,7 @@ class Car {
   draw() {
     push()
     translate(this.position.x, this.position.y)
-    rotate(this.angle)
+    rotate(this.velocity.heading() + PI/2)
     fill(255)
     rect(-this.w/2, -this.h/2, this.w, this.h);
     pop();
