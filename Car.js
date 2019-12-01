@@ -21,7 +21,7 @@ class Car {
     this.acceleration.add(force)
   }
 
-  separate(frogs){
+  separate(){
     let count = 0;
     let sum = createVector(0, 0)
     for(const frog of frogs){
@@ -33,6 +33,7 @@ class Car {
         sum.add(diff)
         count ++;
       }
+    }
     if(count > 0){
       sum.div(count)
       sum.normalize()
@@ -44,8 +45,19 @@ class Car {
     return createVector(0, 0)
   }
 
-  ai_move(frogs){
-    const sep = this.separate(frogs)
+  stayInLane(road){
+    if(road == null){ return }
+    for(const r of roads){
+      if(r.x == road.x){
+        continue;
+      }
+      console.log(r)
+    }
+  }
+
+  ai_move(road){
+    const sep = this.separate()
+    const stay = this.stayInLane(road)
     // targeting
     const target = createVector(this.position.x, this.position.y + 20);
     const desired = p5.Vector.sub(target, this.position);
@@ -59,7 +71,11 @@ class Car {
   draw() {
     push()
     translate(this.position.x, this.position.y)
-    rotate(this.velocity.heading() + PI/2)
+    if(this.ai){
+      rotate(this.velocity.heading() + PI/2)
+    }else{
+      rotate(this.angle)
+    }
     fill(255)
     rect(-this.w/2, -this.h/2, this.w, this.h);
     pop();
@@ -73,9 +89,9 @@ class Car {
     }
   }
 
-  move(dirx, diry, road, frogs){
+  move(dirx, diry, road){
     if(this.ai){
-     this.ai_move(frogs);
+     this.ai_move(road);
     }else{
       this.actual_move(dirx, diry, road)
     }
@@ -102,7 +118,7 @@ class Car {
   }
 
   actual_move(dirx, diry, road) {
-    this.angle += dirx * this.maxspeed;
+    this.angle += (dirx * this.maxspeed * 180/PI);
     let r = 0
     switch (road.type) {
       case 'grass':
@@ -131,7 +147,7 @@ class Car {
     }
     let vec = createVector(0, 0);
     if (lt) {
-      
+
       this.acceleration.y += otherc.velocity.y;
       this.acceleration.x += otherc.velocity.x;
     }
