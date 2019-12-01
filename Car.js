@@ -50,7 +50,7 @@ class Car {
     let r = 0
     switch (road.type) {
       case 'grass':
-        r = 0.25
+        r = 0.5
         break
       case 'water':
         r = 0.01
@@ -68,34 +68,8 @@ class Car {
       return;
     }
     this.impacted = 1;
-    const lt = hits[0],
-          rt = hits[1],
-          lb = hits[2],
-          rb = hits[3];
-    console.log("Impact: " + lt + rt + lb + rb);
-    if (lt && rt && lb && rb) {
-      console.log("Hit every part of this car");
-    }
-    let vec = createVector(0, 0);
-    if (lt) {
-     vec.x = Math.abs(this.maxspeed);
-     vec.y = Math.abs(this.maxspeed);
-    }
-    if (rt) {
-      vec.x = -Math.abs(this.maxspeed);
-      vec.y =  Math.abs(this.maxspeed);
-    }
-    if (lb) {
-      vec.x = Math.abs(this.maxspeed);
-      vec.y = -Math.abs(this.maxspeed);
-    }
-    if (rb) {
-      vec.x = -Math.abs(this.maxspeed);
-      vec.y = -Math.abs(this.maxspeed);
-    }
-    //vec.mult(4);
-    this.applyForce(vec);
-    vec.mult(-1);
-    otherc.applyForce(vec);
+    this.acceleration.x = otherc.velocity.x;
+    this.acceleration.y = otherc.velocity.y;
+    
   }
 }

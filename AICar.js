@@ -102,13 +102,15 @@ class AICar extends Car {
   }
 
   ai_move(road){
-    if (false && this.impacted) {
+    if (this.impacted) {
       //maybe decrease acceleration till velcoity is zero
-      if (this.impacted == 2) {
+      if (this.impacted > 1) {
+        
         if (this.velocity.x != 0.0) {
           if (Math.abs(this.velocity.x) < 0.1) {
             this.velocity.x = 0.0;
             this.acceleration.x = 0.0;
+            this.impacted++;
           } else {
             //decrease by 0.1
             this.acceleration.x = this.velocity.x > 0 ? -0.1 : 0.1;
@@ -118,13 +120,15 @@ class AICar extends Car {
           if (Math.abs(this.velocity.y) < 0.1) {
             this.velocity.y = 0.0;
             this.acceleration.y = 0.0;
+            this.impacted++;
           } else {
             //decrease by 0.1
             this.acceleration.y = this.velocity.y > 0 ? -0.1 : 0.1;
           }
         }
-      }
-      this.impacted = 2;
+      } else {this.impacted++;}
+      if (this.impacted > 3) {this.impacted++;}
+      if (this.impacted > 100) {this.impacted = 0;}
       return;
     }
 
