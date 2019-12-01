@@ -20,7 +20,7 @@ const FROG_POINTS = 10;
 
 function setup() {
   createCanvas(400, 400);
-  c = new Car(200, 200);
+  c = new DrivableCar(200, 200);
   setupRoads();
   setupCars();
   setupFrogs();
@@ -33,7 +33,7 @@ function setupFrogs(){
 }
 function setupCars(){
   for(var i = 0; i<10; i++){
-    cars.push(new Car(random(0, 340), random(height), true));
+    cars.push(new AICar(random(0, 340), random(height), true));
   }
   cars.push(new Truck(random(50, 300), random(height)));
 }

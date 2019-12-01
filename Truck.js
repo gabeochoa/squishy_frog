@@ -1,4 +1,4 @@
-class Truck extends Car {
+class Truck extends AICar {
 
   constructor(x, y){
     super(x, y, true, true);
