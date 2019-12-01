@@ -72,6 +72,20 @@ function list_col(c, roads, default_val) {
   return default_val
 }
 
+function hitFrog(frog, is_user=false){
+  if(is_user){
+    console.log("You hit a frog")
+    points += FROG_POINTS;
+    if(random(0,1) > 0.5){
+      frogs.push(new Frog())
+    }
+  }
+  blood.push(new Blood(frog.x, frog.y))
+  if(blood.length > 50){
+    blood.pop();
+  }
+  frog.reset();
+}
 
 function drawUI() {
   fill(0)
@@ -89,20 +103,13 @@ function draw() {
   const onFrog = list_col(c, frogs, null);
 
   if(onFrog){
-    console.log("You hit a frog")
-    points += FROG_POINTS;
-    blood.push(new Blood(onFrog.x, onFrog.y))
-    onFrog.reset();
-    if(random(0,1) > 0.5){
-      frogs.push(new Frog())
-    }
+    hitFrog(onFrog, true)
   }
 
   for(const car of cars){
     const onFrog = list_col(car, frogs, null);
     if(onFrog){
-      blood.push(new Blood(onFrog.x, onFrog.y))
-      onFrog.reset();
+      hitFrog(onFrog)
     }
   }
 
