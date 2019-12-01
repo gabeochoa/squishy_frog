@@ -1,6 +1,8 @@
 
 class Car {
   constructor(x, y, ai=false, ai_dir=true) {
+    this.w = 10
+    this.h = 20
     this.position = createVector(x, y);
     this.velocity = createVector(
       0,
@@ -12,8 +14,6 @@ class Car {
     this.maxforce = 0.25;
     this.ai = ai;
 
-    this.w = 10;
-    this.h = 20;
     this.sep = this.h * 2;
     this.impacted = 0;
   }

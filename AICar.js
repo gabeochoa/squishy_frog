@@ -17,6 +17,7 @@ class AICar extends Car {
         count ++;
       }
     }
+
     if(count > 0){
       sum.div(count)
       sum.normalize()

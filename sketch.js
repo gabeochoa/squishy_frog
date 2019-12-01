@@ -10,6 +10,7 @@ const DEBUG = false
 let t_start;
 let t_elapsed = 0;
 
+
 class Blood {
   constructor(x, y){
     this.pos = createVector(x, y);
@@ -22,7 +23,7 @@ class Blood {
 }
 
 function setup() {
-   t_start = millis()
+  t_start = millis()
   createCanvas(400, 400);
   noStroke();
   c = new DrivableCar(200, 200);
