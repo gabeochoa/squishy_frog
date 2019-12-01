@@ -6,7 +6,7 @@ let cars = [];
 let roads = [];
 let points = 0
 const FROG_POINTS = 10;
-const DEBUG = false
+const DEBUG = true
 let t_start;
 let t_elapsed = 0;
 

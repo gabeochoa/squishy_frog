@@ -2,15 +2,22 @@
 class AICar extends Car {
   constructor(x, y) {
     super(x, y, true, true)
+    this.debug_vectors = {};
   }
 
-  separate(){
+  separateCars(){
+    return this.separate(cars.concat([c]), this.h*3);
+  }
+  separateFrogs(){
+    return this.separate(frogs, this.w);
+  }
+  separate(items, spacing){
     let count = 0;
     let sum = createVector(0, 0)
-    for(const frog of frogs){
-      const d = p5.Vector.dist(this.position, frog.position);
-      if(d > 0 && d < this.sep){
-        let diff = p5.Vector.sub(this.position, frog.position)
+    for(const item of items){
+      const d = p5.Vector.dist(this.position, item.position);
+      if(d > 0 && d < spacing){
+        let diff = p5.Vector.sub(this.position, item.position)
         diff.normalize()
         diff.div(d)
         sum.add(diff)
@@ -30,11 +37,15 @@ class AICar extends Car {
   }
 
   stayInLane(road){
+    // distance you can be from the road before having to come back
     const STRAY_DIST = this.w
+
+    // lets predict where this car will be in 25 ticks
     const predict = this.velocity.copy();
     predict.normalize(); predict.mult(25);
     const predicted_loc = p5.Vector.add(this.position, predict)
 
+    // find the closest edge of the road we are on
     const left_start = createVector(road.x + this.w, road.y)
     const left_end = createVector(road.x + this.w, height)
     const right_start = createVector(road.x + road.w, road.y)
@@ -43,13 +54,17 @@ class AICar extends Car {
     const right_dist = p5.Vector.dist(this.position, right_start)
     let a = left_start
     let b = left_end
+    let flip = false
     if(left_dist > right_dist)
     {
       a = right_start
       b = right_end
+      flip = true
     }
+
+    // get the normal point where we meet the edge
     const normal = this.getNormal(predicted_loc, a, b);
-    const dir = p5.Vector.sub(b, a);
+    const dir = flip? p5.Vector.sub(a, b) : p5.Vector.sub(b, a);
     dir.normalize();
     dir.mult(10)
     const target = p5.Vector.add(normal, dir);
@@ -110,7 +125,8 @@ class AICar extends Car {
       this.impacted = 2;
       return;
     }
-    const sep = this.separate()
+    const sep_frogs = this.separateFrogs()
+    const sep_cars = this.separateCars()
     const stay = this.stayOnRoad(road)
     const steer = this.seek(
       createVector(
@@ -119,11 +135,16 @@ class AICar extends Car {
       ),
       road.direction
     );
+    this.debug_vectors['sep_cars'] = sep_cars
+    this.debug_vectors['sep_frogs'] = sep_frogs
+    this.debug_vectors['stay'] = stay
+    this.debug_vectors['steer'] = steer
     // make avoiding frogs less important
     // sep.mult(0.25)
     // steer.mult(0.50)
     // steer.add(stay)
-    steer.add(sep)
+    // steer.add(sep_frogs)
+    steer.add(sep_cars)
     this.applyForce(steer)
   }
 
@@ -150,5 +171,35 @@ class AICar extends Car {
     }
     this.position.add(this.velocity)
     this.acceleration.mult(0.5);
+  }
+
+  draw_vec(vec, color){
+    if(!vec){return}
+    vec.mult(100)
+    push();
+    stroke(...color);
+    strokeWeight(3);
+    fill(...color);
+    translate(this.position.x, this.position.y);
+    line(0, 0, vec.x, vec.y);
+    rotate(vec.heading());
+    let arrowSize = 5;
+    translate(vec.mag() - arrowSize, 0);
+    triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+    pop();
+  }
+
+  draw(){
+    super.draw()
+    if(DEBUG){
+      push()
+        stroke(0)
+        this.draw_vec(this.debug_vectors['sep_cars'], [255, 255, 0]) // yellow
+        this.draw_vec(this.debug_vectors['sep_frogs'], [255, 0, 0]) // red
+        this.draw_vec(this.debug_vectors['sep'], [255, 0, 0]) // red
+        this.draw_vec(this.debug_vectors['stay'], [0, 255, 0]) // green
+        this.draw_vec(this.debug_vectors['steer'], [0, 0, 255]) // blue
+      pop()
+    }
   }
 }

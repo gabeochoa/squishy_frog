@@ -10,11 +10,10 @@ class Car {
     );
     this.acceleration = createVector(0, 0);
     this.angle = 0
-    this.maxspeed = 5;
+    this.maxspeed = 3;
     this.maxforce = 0.25;
     this.ai = ai;
 
-    this.sep = this.h * 2;
     this.impacted = 0;
   }
 
@@ -40,15 +39,6 @@ class Car {
     }
     fill(...this.getColor())
     rect(-this.w/2, -this.h/2, this.w, this.h);
-    pop();
-    if(DEBUG && this.ai){
-      for(const frog of frogs){
-        const d = p5.Vector.dist(this.position, frog.position);
-        if(d > 0 && d < this.sep){
-          line(this.position.x, this.position.y, frog.position.x, frog.position.y)
-        }
-      }
-    }
     pop();
   }
 
