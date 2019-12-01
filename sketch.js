@@ -28,12 +28,12 @@ function setup() {
 
 function setupFrogs(){
   for(var i = 0; i<25; i++){
-    frogs.push(new Frog());
+    // frogs.push(new Frog());
   }
 }
 function setupCars(){
   for(var i = 0; i<10; i++){
-    cars.push(new Car(random(0, 340), random(height), true));
+    // cars.push(new Car(random(0, 340), random(height), true));
   }
   cars.push(new Truck(random(50, 300), random(height)));
 }
@@ -63,8 +63,8 @@ function keyStuff() {
   return [x, y];
 }
 
-function list_col(c, roads, default_val, car) {
-  for (const r of roads) {
+function list_col(c, items, default_val, car) {
+  for (const r of items) {
     const b = car ? intersection(c, r, car) : intersection(c, r);
     if (b) {
       return r
@@ -106,6 +106,7 @@ function draw() {
   const onCar = list_col(c, cars, null, hits);
 
   if (onCar) {
+    console.log("ON Car", onCar)
     onCar.impact(c, hits)
   }
 

@@ -1,6 +1,3 @@
-
-
-
 class Frog {
 
   SIZE = 7;
