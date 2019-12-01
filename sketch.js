@@ -80,7 +80,7 @@ function hitFrog(frog, is_user=false){
       frogs.push(new Frog())
     }
   }
-  blood.push(new Blood(frog.x, frog.y))
+  blood.push(new Blood(frog.position.x, frog.position.y))
   if(blood.length > 50){
     blood.pop();
   }
@@ -121,7 +121,7 @@ function draw() {
   }
 
   for (const car of cars) {
-    car.move();
+    car.move(null, null, null, frogs);
   }
 
   // Drawing only
