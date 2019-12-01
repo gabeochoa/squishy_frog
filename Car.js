@@ -11,10 +11,11 @@ class Car {
     this.maxspeed = 5;
     this.maxforce = 0.25;
     this.ai = ai;
-
+    
     this.w = 10;
     this.h = 20;
     this.sep = this.h * 2;
+    this.impacted = false;
   }
 
   applyForce(force){
@@ -100,6 +101,10 @@ class Car {
   }
 
   ai_move(road){
+    if (this.impacted == true) {
+      //maybe decrease acceleration till velcoity is zero
+      return;
+    }
     const sep = this.separate()
     const stay = this.stayOnRoad(road)
     const steer = this.seek(
@@ -188,30 +193,37 @@ class Car {
 
   impact(otherc, hits) {
     // LT: 0 RT: 1 LB: 2 RB: 3
+    if (this.impacted == true) {
+      return;
+    }
+    this.impacted = true;
     const lt = hits[0],
           rt = hits[1],
           lb = hits[2],
           rb = hits[3];
+    console.log("Impact: " + lt + rt + lb + rb);
     if (lt && rt && lb && rb) {
       console.log("Hit every part of this car");
     }
     let vec = createVector(0, 0);
     if (lt) {
-
-      this.acceleration.y += otherc.velocity.y;
-      this.acceleration.x += otherc.velocity.x;
+     vec.x = Math.abs(otherc.velocity.x);
+     vec.y = Math.abs(otherc.velocity.y);
     }
     if (rt) {
-      this.acceleration.y += otherc.velocity.y;
-      this.acceleration.x -= otherc.velocity.x;
+      vec.x = -Math.abs(otherc.velocity.x);
+      vec.y =  Math.abs(otherc.velocity.y);
     }
     if (lb) {
-      this.acceleration.y -= otherc.velocity.y;
-      this.acceleration.x += otherc.velocity.x;
+      vec.x = Math.abs(otherc.velocity.x);
+      vec.y = -Math.abs(otherc.velocity.y);
     }
     if (rb) {
-      this.acceleration.y -= otherc.velocity.y;
-      this.acceleration.x -= otherc.velocity.x;
+      vec.x = -Math.abs(otherc.velocity.x);
+      vec.y = -Math.abs(otherc.velocity.y);
     }
+    this.applyForce(vec);
+    vec.mult(-1);
+    otherc.applyForce(vec);
   }
 }

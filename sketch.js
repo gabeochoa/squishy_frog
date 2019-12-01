@@ -26,8 +26,8 @@ function setup() {
 }
 
 function setupFrogs(){
-  for(var i = 0; i<25; i++){
-    frogs.push(new Frog());
+  for(var i = 0; i<10; i++){
+    //frogs.push(new Frog());
   }
 }
 function setupCars(){
@@ -100,7 +100,7 @@ function draw() {
   // Collision
   const onRoad = list_col(c, roads, {type: 'none'});
   const onFrog = list_col(c, frogs, null);
-  let hits = 1;
+  let hits = [false, false, false, false];
   const onCar = list_col(c, cars, null, hits);
 
   if (onCar) {
