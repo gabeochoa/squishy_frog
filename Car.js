@@ -28,9 +28,6 @@ class Car {
 
   draw() {
     push()
-    stroke(0)
-
-    push()
     translate(this.position.x, this.position.y)
     if(this.ai){
       rotate(this.velocity.heading() + PI/2)
@@ -53,7 +50,7 @@ class Car {
         r = 0.5
         break
       case 'water':
-        r = 0.01
+        r = 0.1
         break
       default:
         r = 0.75;
@@ -68,8 +65,8 @@ class Car {
       return;
     }
     this.impacted = 1;
-    this.acceleration.x = otherc.velocity.x;
-    this.acceleration.y = otherc.velocity.y;
-    
+    // this.acceleration.x = otherc.velocity.x;
+    // this.acceleration.y = otherc.velocity.y;
+
   }
 }

@@ -41,12 +41,10 @@ class AICar extends Car {
   stayInLane(road){
     // distance you can be from the road before having to come back
     const STRAY_DIST = this.w
-
     // lets predict where this car will be in 25 ticks
     const predict = this.velocity.copy();
     predict.normalize(); predict.mult(25);
     const predicted_loc = p5.Vector.add(this.position, predict)
-
     // find the closest edge of the road we are on
     const left_start = createVector(road.x + this.w, road.y)
     const left_end = createVector(road.x + this.w, height)
@@ -63,7 +61,6 @@ class AICar extends Car {
       b = right_end
       flip = true
     }
-
     // get the normal point where we meet the edge
     const normal = this.getNormal(predicted_loc, a, b);
     const dir = flip? p5.Vector.sub(a, b) : p5.Vector.sub(b, a);
@@ -102,39 +99,39 @@ class AICar extends Car {
   }
 
   ai_move(road){
-    if (this.impacted) {
-      //maybe decrease acceleration till velcoity is zero
-      if (this.impacted > 1) {
-        
-        if (this.velocity.x != 0.0) {
-          if (Math.abs(this.velocity.x) < 0.1) {
-            this.velocity.x = 0.0;
-            this.acceleration.x = 0.0;
-            this.impacted++;
-          } else {
-            //decrease by 0.1
-            this.acceleration.x = this.velocity.x > 0 ? -0.1 : 0.1;
-          }
-        }
-        if (this.velocity.y != 0.0) {
-          if (Math.abs(this.velocity.y) < 0.1) {
-            this.velocity.y = 0.0;
-            this.acceleration.y = 0.0;
-            this.impacted++;
-          } else {
-            //decrease by 0.1
-            this.acceleration.y = this.velocity.y > 0 ? -0.1 : 0.1;
-          }
-        }
-      } else {this.impacted++;}
-      if (this.impacted > 3) {this.impacted++;}
-      if (this.impacted > 100) {this.impacted = 0;}
-      return;
-    }
+    // if (this.impacted) {
+    //   //maybe decrease acceleration till velocity is zero
+    //   if (this.impacted > 1) {
+    //
+    //     if (this.velocity.x != 0.0) {
+    //       if (Math.abs(this.velocity.x) < 0.1) {
+    //         this.velocity.x = 0.0;
+    //         this.acceleration.x = 0.0;
+    //         this.impacted++;
+    //       } else {
+    //         //decrease by 0.1
+    //         this.acceleration.x = this.velocity.x > 0 ? -0.1 : 0.1;
+    //       }
+    //     }
+    //     if (this.velocity.y != 0.0) {
+    //       if (Math.abs(this.velocity.y) < 0.1) {
+    //         this.velocity.y = 0.0;
+    //         this.acceleration.y = 0.0;
+    //         this.impacted++;
+    //       } else {
+    //         //decrease by 0.1
+    //         this.acceleration.y = this.velocity.y > 0 ? -0.1 : 0.1;
+    //       }
+    //     }
+    //   } else {this.impacted++;}
+    //   if (this.impacted > 3) {this.impacted++;}
+    //   if (this.impacted > 100) {this.impacted = 0;}
+    //   return;
+    // }
 
-    const sep_frogs = this.separateFrogs()
-    const sep_cars = this.separateCars()
-    const stay = this.stayOnRoad(road)
+    // const sep_frogs = this.separateFrogs()
+    // const sep_cars = this.separateCars()
+    // const stay = this.stayOnRoad(road)
     const steer = this.seek(
       createVector(
         this.position.x,
@@ -142,20 +139,23 @@ class AICar extends Car {
       ),
       road.direction
     );
-    this.debug_vectors['sep_cars'] = sep_cars
+    // this.debug_vectors['sep_cars'] = sep_cars
     // this.debug_vectors['sep_frogs'] = sep_frogs
     // this.debug_vectors['stay'] = stay
-    this.debug_vectors['steer'] = steer
+    // this.debug_vectors['steer'] = steer
     // make avoiding frogs less important
     // sep.mult(0.25)
     steer.mult(2)
     this.applyForce(steer)
     // steer.add(stay)
     // steer.add(sep_frogs)
-    this.applyForce(sep_cars)
+    // this.applyForce(sep_cars)
   }
 
   getColor(){
+    if(this.impacted > 0){
+      return [0,0,255]
+    }
     return [255, 255, 255]
   }
 
@@ -168,19 +168,20 @@ class AICar extends Car {
     if(this.position.x + this.w > width){
       this.position.x -= this.w/4
     }
+
     this.velocity.add(this.acceleration)
     this.velocity.limit(this.maxspeed * this.getRoadSpeed(road));
-    if(this.teleported < 0){
+    // if(this.teleported < 0){
       if (this.position.y < -this.h) {
         this.position.y = height-this.h;
       }
       if (this.position.y > height + this.h) {
         this.position.y = this.h;
       }
-      this.teleported = this.teleport_reset;
-    }
-    this.teleported --;
-
+    //   this.teleported = this.teleport_reset;
+    // }
+    // this.teleported --;
+    //
     this.position.add(this.velocity)
     this.acceleration.mult(0.5);
   }
@@ -200,7 +201,6 @@ class AICar extends Car {
     triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
     pop();
   }
-
   draw(){
     super.draw()
     if(DEBUG){

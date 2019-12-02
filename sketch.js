@@ -6,24 +6,9 @@ let cars = [];
 let roads = [];
 let points = 0
 const FROG_POINTS = 10;
-const DEBUG = true
+const DEBUG = false
 let t_start;
 let t_elapsed = 0;
-
-
-class Blood {
-  constructor(x, y){
-    this.pos = createVector(x, y);
-    this.fade = 255;
-  }
-  draw(){
-    push()
-    noStroke()
-    fill(255, 0, 0, this.fade--);
-    rect(this.pos.x, this.pos.y, 3.5, 3.5);
-    pop()
-  }
-}
 
 function setup() {
   t_start = millis()
@@ -37,14 +22,15 @@ function setup() {
 
 function setupFrogs(){
   for(var i = 0; i<25; i++){
-    frogs.push(new Frog());
+    // frogs.push(new Frog());
   }
 }
 function setupCars(){
   for(var i = 0; i<10; i++){
-    cars.push(new AICar(random(0, 340), random(height), true));
+    // cars.push(new AICar(random(0, 340), random(height), true));
   }
-  cars.push(new Truck(random(50, 300), random(height)));
+  // cars.push(new Truck(random(50, 300), random(height)));
+  cars.push(new AICar(random(0, 340), random(height), true));
 }
 
 function setupRoads(){
@@ -75,8 +61,10 @@ function keyStuff() {
 
 function list_col(c, items, default_val, car) {
   for (const r of items) {
-    const b = car ? intersection(c, r, car) : intersection(c, r);
+    const b = doPolygonsIntersect(c, r);
+    // const b = car ? intersection(c, r, car) : intersection(c, r);
     if (b) { return r; }
+    else{ r.impacted = 0}
   }
   return default_val
 }
@@ -109,7 +97,7 @@ function move_and_collision(){
   const onCar = list_col(c, cars, null);
   if (onCar) {
     console.log("ON Car", onCar)
-    onCar.impact(c)
+    onCar.impact()
   }
   if(onFrog){
     hitFrog(onFrog, true)
